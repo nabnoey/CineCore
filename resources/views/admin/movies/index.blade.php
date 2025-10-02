@@ -35,10 +35,10 @@
                             <a href="{{ route('admin.movies.edit', $movie->id) }}" class="btn btn-warning btn-sm me-1">
                                 <i class="bi bi-pencil-square"></i> Edit
                             </a>
-                            <form action="{{ route('admin.movies.destroy', $movie->id) }}" method="POST" class="d-inline">
+                            <form action="{{ route('admin.movies.destroy', $movie->id) }}" method="POST" class="d-inline" id="delete-movie-form-{{ $movie->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this movie?')">
+                                <button type="submit" class="btn btn-danger btn-sm">
                                     <i class="bi bi-trash"></i> Delete
                                 </button>
                             </form>
@@ -56,3 +56,30 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const deleteForms = document.querySelectorAll('form[id^="delete-movie-form-"]');
+    deleteForms.forEach(form => {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: "คุณจะไม่สามารถกู้คืนภาพยนต์นี้ได้!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+});
+</script>
+@endpush

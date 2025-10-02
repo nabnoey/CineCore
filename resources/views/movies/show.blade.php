@@ -34,11 +34,7 @@
     }
     .rating > label {
         font-size: 2rem;
-<<<<<<< HEAD
-        color: #444;
-=======
         color: #555; /* Darker grey for unselected on dark background */
->>>>>>> 06ffc386ba7b6c3cb7b064e359fa6a7f91a16770
         cursor: pointer;
         transition: color 0.2s;
         padding: 0 0.1rem;
@@ -53,13 +49,8 @@
 
     /* 3. Static Star Display (Read-only) */
     .static-rating {
-<<<<<<< HEAD
-        font-size: 1.2rem;
-        color: #444;
-=======
         font-size: 1.5rem;
         color: #555;
->>>>>>> 06ffc386ba7b6c3cb7b064e359fa6a7f91a16770
     }
     .static-rating .filled {
         color: var(--star-filled);
@@ -178,18 +169,10 @@
     }
 </style>
 
-<<<<<<< HEAD
-<div class="container mt-4 text-white">
-=======
 <div class="container mt-5">
->>>>>>> 06ffc386ba7b6c3cb7b064e359fa6a7f91a16770
     <div class="row">
         <div class="col-md-4">
-<<<<<<< HEAD
-            <img src="{{ $movie->poster_image_url }}" class="img-fluid rounded shadow" alt="{{ $movie->title }}">
-=======
             <img src="{{ $movie->poster_image_url }}" class="img-fluid movie-poster-img" alt="{{ $movie->title }}">
->>>>>>> 06ffc386ba7b6c3cb7b064e359fa6a7f91a16770
         </div>
 
         <div class="col-md-8">
@@ -199,17 +182,6 @@
                 $averageRating = $movie->comments->avg('rating');
                 $totalComments = $movie->comments->count();
             @endphp
-<<<<<<< HEAD
-            <div class="static-rating avg-rating-display mb-2" title="Average rating: {{ number_format($averageRating, 1) }} out of 5">
-                @for ($i = 1; $i <= 5; $i++)
-                    <span class="{{ $i <= round($averageRating) ? 'filled text-warning' : 'text-secondary' }}">&#9733;</span>
-                @endfor
-                <span class="ms-2 h5 align-middle">({{ number_format($averageRating, 1) }})</span>
-            </div>
-
-            <p class="text-white-50">Released on: {{ $movie->release_date }}</p>
-            <hr>
-=======
 
             <div class="avg-rating-block mb-4">
                 <div class="text-center">
@@ -231,7 +203,6 @@
             <hr class="hr-cinematic">
             
             <h5 class="mt-4 mb-3 fw-bold text-light">Synopsis</h5>
->>>>>>> 06ffc386ba7b6c3cb7b064e359fa6a7f91a16770
             <p>{{ $movie->description }}</p>
 
             <div class="mt-4 d-flex align-items-center gap-3">
@@ -271,132 +242,14 @@
 
             <h5 class="mb-3 fw-bold text-light">Categories:</h5>
             @if($movie->categories->count() > 0)
-<<<<<<< HEAD
-                @foreach($movie->categories as $category)
-                    <span class="badge bg-primary" style="font-size: 0.9rem;">{{ $category->name }}</span>
-                @endforeach
-=======
                 <div>
                     @foreach($movie->categories as $category)
                         <span class="badge rounded-pill bg-info me-2 py-2 px-3 fw-bold">{{ $category->name }}</span>
                     @endforeach
                 </div>
->>>>>>> 06ffc386ba7b6c3cb7b064e359fa6a7f91a16770
             @else
                 <p class="text-muted">No categories assigned.</p>
             @endif
-        </div>
-    </div>
-
-<<<<<<< HEAD
-    <!-- Comments Section -->
-    <div class="row mt-5">
-        <div class="col-md-8 offset-md-4">
-            <h4 class="mb-4">Comments</h4>
-
-            <!-- Add Comment -->
-            @auth
-            <div class="card mb-4 comment-form-card text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Leave a comment</h5>
-
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    <form action="{{ route('comments.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="movie_id" value="{{ $movie->id }}">
-
-                        <div class="mb-3">
-                            <label class="form-label">Your rating:</label>
-                            <div class="rating">
-                                @for($i = 5; $i >= 1; $i--)
-                                    <input type="radio" id="star{{$i}}" name="rating" value="{{$i}}" required>
-                                    <label for="star{{$i}}" title="{{$i}} stars">&#9733;</label>
-                                @endfor
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <textarea class="form-control bg-dark text-white" name="body" rows="3" placeholder="Write your comment here..." required></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Post Comment</button>
-                    </form>
-                </div>
-            </div>
-            @endauth
-
-            @guest
-                <p><a href="{{ route('login') }}">Log in to leave a comment</a></p>
-            @endguest
-
-            <!-- Display Comments -->
-            @forelse ($movie->comments->sortByDesc('created_at') as $comment)
-            <div class="card mb-3 comment-card text-white">
-                <div class="card-body d-flex">
-                    <div class="flex-shrink-0 me-3">
-                        <img src="{{ $comment->user->profile_image ? asset('storage/' . $comment->user->profile_image) : 'https://via.placeholder.com/50' }}" alt="{{ $comment->user->name }}" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold mb-0">{{ $comment->user->name }}</h6>
-                            <small class="text-white-50">{{ $comment->created_at->diffForHumans() }}</small>
-                        </div>
-                        <div class="static-rating my-1">
-                            @for ($i = 1; $i <= 5; $i++)
-                                <span class="{{ $i <= $comment->rating ? 'filled text-warning' : 'text-secondary' }}">&#9733;</span>
-                            @endfor
-                        </div>
-                        <p class="card-text mt-2">{{ $comment->body }}</p>
-
-                        <div class="mt-2 d-flex align-items-center gap-2">
-                            @auth
-                                <!-- Like button -->
-                                @if(auth()->user()->role === 'user' && auth()->id() !== $comment->user_id)
-                                    <form action="{{ route('comments.like', $comment->id) }}" method="POST" class="m-0">
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-outline-primary">
-                                            👍 Like ({{ $comment->likes_count ?? 0 }})
-                                        </button>
-                                    </form>
-                                @endif
-
-                                <!-- Edit button -->
-                                @can('update', $comment)
-                                    <a href="{{ route('comments.edit', $comment->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-                                @endcan
-
-                                <!-- Delete button -->
-                                @can('delete', $comment)
-                                    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="m-0">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                    </form>
-                                @endcan
-                            @endauth
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @empty
-                <div class="text-center text-white-50">
-                    <p>No comments yet. Be the first to comment!</p>
-                </div>
-            @endforelse
-        </div>
-    </div>
-</div>
-@endsection
-=======
         </div>
     </div>
 
@@ -534,10 +387,9 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const deleteForms = document.querySelectorAll('.delete-comment-form');
-    deleteForms.forEach(form => {
+    document.querySelectorAll('.delete-comment-form').forEach(form => {
         form.addEventListener('submit', function (event) {
-            event.preventDefault(); // ป้องกันไม่ให้ฟอร์มส่งค่าทันที
+            event.preventDefault();
 
             Swal.fire({
                 title: 'คุณแน่ใจหรือไม่?',
@@ -550,8 +402,44 @@ document.addEventListener('DOMContentLoaded', function () {
                 cancelButtonText: 'ยกเลิก'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // หากผู้ใช้ยืนยัน, ให้ส่งฟอร์ม
-                    form.submit();
+                    // Use Fetch API to submit the form
+                    fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            _method: 'DELETE'
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire(
+                                'ลบสำเร็จ',
+                                'ความคิดเห็นถูกลบแล้ว',
+                                'success'
+                            ).then(() => {
+                                location.reload(); // Reload the page to see the change
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'Something went wrong.',
+                                'error'
+                            );
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire(
+                            'Error!',
+                            'Something went wrong.',
+                            'error'
+                        );
+                    });
                 }
             });
         });
@@ -559,4 +447,3 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
->>>>>>> 06ffc386ba7b6c3cb7b064e359fa6a7f91a16770

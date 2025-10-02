@@ -56,13 +56,20 @@ class CommentController extends Controller
     }
 
     // Delete comment (เฉพาะ admin)
-    public function destroy(Comment $comment)
+    public function destroy(Comment $comment, Request $request)
     {
         if (Auth::user()->role !== 'admin') {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+            }
             abort(403, 'Only admin can delete comments.');
         }
 
         $comment->delete();
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Comment deleted successfully.']);
+        }
 
         return back()->with('success', 'Comment deleted successfully.');
     }
