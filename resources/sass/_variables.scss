@@ -1,0 +1,42 @@
+// Dark Theme Color Palette
+$body-bg: #121212;
+$body-color: #e0e0e0;
+
+// Bootstrap Variable Overrides
+$primary: #3498db;
+$secondary: #6c757d;
+$success: #2ecc71;
+$info: #3498db;
+$warning: #f1c40f;
+$danger: #e74c3c;
+$light: #343a40;
+$dark: #1c1c1c;
+
+// Typography
+$font-family-sans-serif: 'Nunito', sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Navbar
+$navbar-dark-color: rgba(255, 255, 255, 0.75);
+$navbar-dark-hover-color: #ffffff;
+$navbar-light-color: $body-color;
+$navbar-light-hover-color: $primary;
+
+// Cards
+$card-bg: #1e1e1e;
+$card-border-color: rgba(255, 255, 255, 0.125);
+$card-color: $body-color;
+
+// Dropdowns
+$dropdown-bg: $card-bg;
+$dropdown-border-color: $card-border-color;
+$dropdown-link-color: $body-color;
+$dropdown-link-hover-color: #ffffff;
+$dropdown-link-hover-bg: $primary;
+
+// Forms
+$input-bg: #2c2f33;
+$input-border-color: #444;
+$input-color: #e8e6e3;
+$input-placeholder-color: #6c757d;
