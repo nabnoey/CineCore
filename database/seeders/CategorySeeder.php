@@ -20,6 +20,7 @@ class CategorySeeder extends Seeder
         Category::create(['name' => 'Horror (สยองขวัญ)']);
         Category::create(['name' => 'Mystery (ลึกลับ)']);
         Category::create(['name' => 'Romance (โรแมนติก)']);
+         Category::create(['name' => 'Comedy (ตลก)']);
         Category::create(['name' => 'Sci-Fi (ไซไฟ)']);
         Category::create(['name' => 'Thriller (ระทึกขวัญ)']);
     }
