@@ -203,7 +203,7 @@
             <hr class="hr-cinematic">
             
             <h5 class="mt-4 mb-3 fw-bold text-light">Synopsis</h5>
-            <p>{{ $movie->description }}</p>
+            <p class="text-white">{{ $movie->description }}</p>
 
             <div class="mt-4 d-flex align-items-center gap-3">
                 @if($movie->trailer_url)

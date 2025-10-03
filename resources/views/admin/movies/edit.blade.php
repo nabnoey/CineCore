@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container my-5">
-    <h1 class="mb-4 fw-bold">Edit Movie</h1>
+    <h1 class="mb-4 fw-bold text-black">Edit Movie</h1>
     <form action="{{ route('admin.movies.update', $movie->id) }}" method="POST">
         @csrf
         @method('PUT')

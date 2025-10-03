@@ -18,7 +18,7 @@
     @stack('styles')
 </head>
 <body style="background-color: #121212;">
-    <div id="app" class="text-white">
+    <div id="app" class="text-black">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-md navbar-dark bg-black border-bottom border-secondary shadow-sm">
             <div class="container">

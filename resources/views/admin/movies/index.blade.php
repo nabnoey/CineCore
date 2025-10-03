@@ -3,7 +3,7 @@
 @section('content')
 <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h3">Movies</h1>
+        <h1 class="h3 text-white">Movies</h1>
         <a href="{{ route('admin.movies.create') }}" class="btn btn-success">+ Add Movie</a>
     </div>
 

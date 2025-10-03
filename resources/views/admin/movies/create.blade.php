@@ -38,6 +38,7 @@
                     <p class="text-white-50">กรอกรายละเอียดเพื่อเพิ่มภาพยนต์ใหม่</p>
                 </div>
                 <div class="card-body">
+                    
                     <form method="POST" action="{{ route('admin.movies.store') }}">
                         @csrf
                         <div class="row">
