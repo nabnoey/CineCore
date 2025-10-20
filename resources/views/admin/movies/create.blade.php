@@ -75,7 +75,7 @@
                                     <label for="poster_image_url" class="form-label">Poster URL</label>
                                     <input type="text" id="poster_image_url" name="poster_image_url" class="form-control bg-secondary text-white" required>
                                 </div>
-                                <img id="poster-preview" src="#" alt="Poster Preview" class="poster-preview mt-2"/>
+                                <img id="poster-preview" alt="Poster Preview" class="poster-preview mt-2"/>
                             </div>
                         </div>
                         <div class="text-center mt-4">

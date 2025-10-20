@@ -16,7 +16,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body p-0">
-            <table class="table table-striped table-hover mb-0">
+            +         <table class="table table-dark table-striped table-hover mb-0">  
                 <thead class="table-dark">
                     <tr>
                         <th scope="col">ID</th>

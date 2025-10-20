@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container my-5">
+<div class="container my-5 text-black">
     <h1 class="mb-4 fw-bold text-black">Edit Movie</h1>
     <form action="{{ route('admin.movies.update', $movie->id) }}" method="POST">
         @csrf
@@ -32,9 +32,9 @@
         </div>
 
         <!-- Categories -->
-        <div class="mb-3">
+        <div class="mb-3 ">
             <label for="categories" class="form-label">Categories</label>
-            <select name="categories[]" class="form-select select2" multiple>
+            <select name="categories[]" class="form-select select2 text-black" multiple>
                 @foreach($categories as $category)
                     <option value="{{ $category->id }}"
                         {{ $movie->categories->contains($category->id) ? 'selected' : '' }}>
@@ -123,16 +123,29 @@ body {
     color: #333;
 }
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-    background-color: #555;
-    color: #f5f5f5;
-    border: none;
+    background-color: #e9ecef;
+    color: #212529;
+    border: 1px solid #ced4da;
 }
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-    color: #f5f5f5;
+    color: #212529;
 }
 .select2-container--default .select2-selection--multiple:focus {
     border-color: #888;
     box-shadow: 0 0 0 0.2rem rgba(136,136,136,0.2);
+}
+
+/* Styling for the dropdown results */
+.select2-dropdown {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+.select2-results__option {
+    color: #212529; /* Dark text for dropdown options */
+}
+.select2-results__option--highlighted {
+    background-color: #e9ecef;
+    color: #212529;
 }
 </style>
 @endsection

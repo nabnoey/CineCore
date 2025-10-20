@@ -20,7 +20,7 @@
 <body style="background-color: #121212;">
     <div id="app" class="text-black">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-md navbar-dark bg-black border-bottom border-secondary shadow-sm">
+        <nav class="navbar navbar-expand-md shadow-sm border-bottom {{ Route::is('admin.movies.edit') ? 'navbar-light bg-light' : 'navbar-dark bg-black border-secondary' }}">
             <div class="container">
                 <!-- Logo -->
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -46,18 +46,18 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link {{ Route::is('admin.movies.edit') ? 'text-dark' : 'text-white' }}" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link {{ Route::is('admin.movies.edit') ? 'text-dark' : 'text-white' }}" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button"
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center {{ Route::is('admin.movies.edit') ? 'text-dark' : 'text-white' }}" href="#" role="button"
                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     @if(Auth::user()->profile_image)
                                         <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="Profile" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
@@ -98,5 +98,68 @@
     @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Ensure Navbar Dropdown works even if Vite/Vite-compiled JS isn’t loaded
+        (function () {
+            function initDropdowns() {
+                if (window.bootstrap && window.bootstrap.Dropdown) {
+                    document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function (el) {
+                        try { new window.bootstrap.Dropdown(el); } catch (e) {}
+                    });
+                }
+            }
+
+            function initManualDropdown() {
+                // Minimal manual toggle if Bootstrap is unavailable
+                var trigger = document.getElementById('navbarDropdown');
+                if (!trigger || trigger.getAttribute('data-manual-dropdown') === 'true') return;
+                trigger.setAttribute('data-manual-dropdown', 'true');
+                var parent = trigger.closest('.dropdown');
+                if (!parent) return;
+                var menu = parent.querySelector('.dropdown-menu');
+                if (!menu) return;
+
+                function closeAll(e) {
+                    if (!parent.contains(e.target)) {
+                        menu.classList.remove('show');
+                        trigger.setAttribute('aria-expanded', 'false');
+                    }
+                }
+
+                trigger.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var willShow = !menu.classList.contains('show');
+                    menu.classList.toggle('show', willShow);
+                    trigger.setAttribute('aria-expanded', willShow ? 'true' : 'false');
+                });
+
+                document.addEventListener('click', closeAll);
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') closeAll({ target: document.body });
+                });
+            }
+
+            if (typeof window.bootstrap === 'undefined') {
+                var s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js';
+                s.crossOrigin = 'anonymous';
+                s.onload = initDropdowns;
+                document.head.appendChild(s);
+                // Also bind manual fallback in case CDN blocked
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initManualDropdown);
+                } else {
+                    initManualDropdown();
+                }
+            } else {
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initDropdowns);
+                } else {
+                    initDropdowns();
+                }
+            }
+        })();
+    </script>
 </body>
 </html>

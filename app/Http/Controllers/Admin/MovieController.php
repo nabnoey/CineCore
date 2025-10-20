@@ -15,7 +15,7 @@ class MovieController extends Controller
     }
 
     public function create() {
-        $categories = Category::all();
+        $categories = Category::all()->unique('name');
         return view('admin.movies.create', compact('categories'));
     }
 
@@ -37,7 +37,7 @@ class MovieController extends Controller
 
     public function edit($id) {
         $movie = Movie::findOrFail($id);
-        $categories = Category::all();
+        $categories = Category::all()->unique('name');
         return view('admin.movies.edit', compact('movie','categories'));
     }
 

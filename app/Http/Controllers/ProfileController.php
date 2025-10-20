@@ -38,14 +38,18 @@ class ProfileController extends Controller
         $user->name = $request->name;
 
         if ($request->hasFile('profile_image')) {
-            // Delete old image if it exists
-            if ($user->profile_image) {
-                Storage::disk('public')->delete($user->profile_image);
-            }
+            try {
+                // Delete old image if it exists
+                if ($user->profile_image) {
+                    Storage::disk('public')->delete($user->profile_image);
+                }
 
-            // Store new image
-            $path = $request->file('profile_image')->store('profile_images', 'public');
-            $user->profile_image = $path;
+                // Store new image
+                $path = $request->file('profile_image')->store('profile_images', 'public');
+                $user->profile_image = $path;
+            } catch (\Exception $e) {
+                return redirect()->route('profile.edit')->with('error', 'Could not upload profile image. Please check storage permissions.');
+            }
         }
 
         $user->save();

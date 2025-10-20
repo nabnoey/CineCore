@@ -177,8 +177,10 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 movieList.innerHTML = ''; // Clear existing movies
                 if (data.length > 0) {
+                    let moviesHtml = '';
                     data.forEach(movie => {
-                        const movieCard = `
+                        const description = movie.description ? movie.description.substring(0, 70) : '';
+                        moviesHtml += `
                         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                             <div class="card movie-card h-100">
                                 <img src="${movie.poster_image_url}" 
@@ -187,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title">${movie.title}</h5>
                                     <p class="card-text small text-truncate-3">
-                                        ${movie.description ? movie.description.substring(0, 70) : ''}
+                                        ${description}
                                     </p>
                                     <div class="mt-3">
                                         <a href="/movies/${movie.id}"
@@ -199,8 +201,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div>
                         </div>
                         `;
-                        movieList.innerHTML += movieCard;
                     });
+                    movieList.innerHTML = moviesHtml;
                 } else {
                     movieList.innerHTML = `
                     <div class="col-12">
