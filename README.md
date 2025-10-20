@@ -1,61 +1,84 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CineCore — ระบบแคตตาล็อกภาพยนตร์ (Laravel)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+โปรเจกต์นี้เป็นเว็บแอปสำหรับแสดงรายการภาพยนตร์และจัดการข้อมูลภาพยนตร์ ฝั่งผู้ใช้ทั่วไปจะเห็นรายการและรายละเอียดภาพยนตร์ ส่วนผู้ดูแล (Admin) สามารถแก้ไขข้อมูลภาพยนตร์ได้ ระบบใช้ Laravel + Vite และผสมผสาน Bootstrap 5, Tailwind CSS/DaisyUI สำหรับ UI
 
-## About Laravel
+## คุณสมบัติหลัก
+- แสดงรายการภาพยนตร์เป็นการ์ดแบบกริด พร้อมภาพโปสเตอร์และลิงก์ไปหน้ารายละเอียด
+- ระบบล็อกอิน/สมัครสมาชิก และเมนูผู้ใช้ผ่าน Navbar Dropdown
+- หน้าผู้ดูแลแก้ไขข้อมูลภาพยนตร์ (ชื่อ เรื่องย่อ โปสเตอร์ URL เทรลเลอร์ URL และหมวดหมู่หลายค่า) พร้อม Select2
+- สไตล์หลักใช้ Bootstrap 5 ผสม Tailwind CSS/DaisyUI และปรับแต่งตัวแปร SCSS สำหรับ Navbar/Dropdown
+- จัดการ asset ด้วย Vite (`@vite`) และมีสคริปต์ fallback ให้ Navbar Dropdown ทำงานแม้ JS ไม่ถูกโหลดจาก Vite
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## โครงสร้างไฟล์ที่เกี่ยวข้อง (บางส่วน)
+- `resources/views/layouts/app.blade.php:23` — โครงหน้า Layout หลัก มี Navbar/โครงสร้างพื้นฐาน และเรียก `@vite(['resources/sass/app.scss', 'resources/js/app.js'])`
+- `resources/views/layouts/app.blade.php:59` — รายการเมนูผู้ใช้แบบ Dropdown (แสดงเมื่อผู้ใช้ล็อกอิน)
+- `resources/views/layouts/app.blade.php:101` — สคริปต์ fallback/initialization สำหรับ Bootstrap Dropdown ให้ใช้งานได้แม้ JS จาก Vite ไม่โหลด
+- `resources/views/movies.blade.php:1` — หน้ารายการภาพยนตร์ (ตัวอย่างหน้าแบบ standalone ใช้ Tailwind/DaisyUI)
+- `resources/views/admin/movies/edit.blade.php:1` — หน้าแก้ไขภาพยนตร์สำหรับผู้ดูแล มีฟอร์มฟิลด์และ Select2 สำหรับหมวดหมู่หลายค่า
+- `resources/js/app.js:1` — จุดเริ่ม JS ของ Vite (import `./bootstrap`)
+- `resources/js/bootstrap.js:1` — โหลด Bootstrap JS และตั้งค่า Axios (รวม Popper ผ่านแพ็กเกจ `bootstrap`)
+- `resources/sass/app.scss:1` — โหลดตัวแปร SCSS, Bootstrap และ Tailwind CSS/DaisyUI
+- `resources/sass/_variables.scss:21` — ตัวแปรปรับโทนสี Navbar/Dropdown
+- `package.json:1` — กำหนด devDependencies และสคริปต์ `vite`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ฟีเจอร์/การทำงานโดยละเอียด
+- Navbar & ผู้ใช้
+  - แสดงเมนู Login/Register เมื่อยังไม่ล็อกอิน
+  - เมื่อเข้าสู่ระบบ จะแสดงชื่อผู้ใช้และรูปโปรไฟล์ (ถ้ามี) ในเมนู Dropdown
+  - ปุ่มใน Dropdown:
+    - ไปแก้ไขโปรไฟล์ `route('profile.edit')`
+    - ออกจากระบบ `route('logout')` (ส่งฟอร์ม POST แบบป้องกัน CSRF)
+- Dropdown ทำงานอย่างไร
+  - ใช้ `data-bs-toggle="dropdown"` ตามมาตรฐาน Bootstrap 5
+  - ถ้า Vite/JS ไม่โหลด ระบบมีสคริปต์ fallback ใน `resources/views/layouts/app.blade.php:101` ที่จะ:
+    - โหลด `bootstrap.bundle.min.js` จาก CDN อัตโนมัติ (ถ้ายังไม่มี `window.bootstrap`)
+    - เรียก `new bootstrap.Dropdown(...)` ให้ทุกตัวที่ระบุ `data-bs-toggle="dropdown"`
+    - มี manual fallback เสริม: คลิกที่ `#navbarDropdown` จะสลับ class `show` ของ `.dropdown-menu` เพื่อให้ใช้งานได้แม้ CDN ถูกบล็อก
+- หน้าแสดงรายการภาพยนตร์
+  - โครง UI เป็นกริดการ์ด พร้อมภาพโปสเตอร์ ชื่อเรื่อง และลิงก์ไป `GET /movies/{id}`
+- หน้าแก้ไขภาพยนตร์ (Admin)
+  - ฟอร์มแก้ไขฟิลด์: Title, Description, Poster Image URL, Trailer URL, Categories (หลายค่า)
+  - ใช้ Select2 เพื่อเลือกหมวดหมู่หลายค่า โหลดผ่าน CDN (`jquery` + `select2`)
+  - เส้นทางที่ใช้งาน: `route('admin.movies.update', id)`, ลิงก์กลับ `route('admin.movies.index')`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## เทคโนโลยีที่ใช้
+- Backend: Laravel (PHP)
+- Frontend: Bootstrap 5, Tailwind CSS 4, DaisyUI
+- Assets: Vite (`@vite`), SCSS
+- JS libs: Axios, Select2, SweetAlert2
+- Dev tooling: `sass`, `vite`
 
-## Learning Laravel
+## การติดตั้งและรันโครงการ (แนะนำ)
+1. ติดตั้งเครื่องมือพื้นฐาน
+   - PHP 8.x, Composer, Node.js LTS, npm
+2. ติดตั้ง dependencies
+   - รัน `composer install`
+   - รัน `npm install`
+3. ตั้งค่าแอป
+   - คัดลอกไฟล์ `.env.example` เป็น `.env` และตั้งค่า DB/APP_KEY
+   - สร้างคีย์ระบบ: `php artisan key:generate`
+   - รันไมเกรตฐานข้อมูล: `php artisan migrate` (และ `php artisan db:seed` ถ้ามี seeder)
+   - ลิงก์สตอเรจ (ถ้าใช้รูปโปรไฟล์): `php artisan storage:link`
+4. รันโหมดพัฒนา
+   - รัน Vite: `npm run dev`
+   - รันเซิร์ฟเวอร์: `php artisan serve`
+5. เปิดเบราว์เซอร์ไปยัง URL ที่แสดง (เช่น `http://127.0.0.1:8000`)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## วิธี build assets สำหรับโปรดักชัน
+- รัน `npm run build` แล้วปรับ config ให้เซิร์ฟเวอร์เสิร์ฟไฟล์ที่ build แล้ว (Vite จะดูแลอัตโนมัติเมื่อใช้ `@vite` ใน Blade)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## หมายเหตุสำคัญเกี่ยวกับ Dropdown
+- หน้าใดที่ไม่ใช้ Layout หลัก (`@extends('layouts.app')`) จะไม่ดึงสคริปต์ fallback ทำให้ Dropdown ไม่ทำงาน ให้:
+  - เปลี่ยนไปใช้ Layout หลัก หรือ
+  - เพิ่ม `@vite(['resources/sass/app.scss','resources/js/app.js'])` และคัดลอกสคริปต์ fallback ตอนท้าย `<body>` ของหน้านั้น
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## การแก้ปัญหาที่พบบ่อย
+- Dropdown ไม่แสดง/ไม่คลิก
+  - ตรวจว่าอยู่ในหน้าที่ใช้ `layouts.app` หรือไม่
+  - ตรวจว่า asset จาก Vite โหลดสำเร็จ (`app.css`, `app.js`)
+  - ดูคอนโซลเบราว์เซอร์ว่ามี error หรือบล็อก CDN/JS หรือไม่
+  - รีเฟรชแบบเคลียร์แคช (Ctrl+F5)
 
-## Laravel Sponsors
+## ลิขสิทธิ์
+- โปรเจกต์นี้สำหรับการศึกษา/ต่อยอด หากต้องการเผยแพร่ โปรดตรวจสอบนโยบายภายในของคุณ
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

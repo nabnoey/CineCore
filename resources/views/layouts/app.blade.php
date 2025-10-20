@@ -36,9 +36,7 @@
                 <!-- Navbar Links -->
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-                        <!-- Additional links can be placed here -->
-                    </ul>
+                    <ul class="navbar-nav me-auto"></ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -72,7 +70,7 @@
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('profile.edit') }}">
-                                        {{ __('แก้ไขโปรไฟล์') }}
+                                        โปรไฟล์
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -97,9 +95,8 @@
     </div>
     @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Ensure Navbar Dropdown works even if Vite/Vite-compiled JS isn’t loaded
+        // Ensure Navbar Dropdown works even if Vite-compiled JS isn't loaded
         (function () {
             function initDropdowns() {
                 if (window.bootstrap && window.bootstrap.Dropdown) {
@@ -163,3 +160,4 @@
     </script>
 </body>
 </html>
+
